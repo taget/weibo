@@ -56,8 +56,10 @@ class WeiboCMD:
 				return
 			#data = self.dumpjson(line)
 			data = self.writetext(line)
+			print data
 			try:
-				ret = self._interface.callweibo('update',data)
+				self._interface.seturl('statuses/update')
+				ret = self._interface.callweibo(data)
 			except:
 				print "发表失败"
 			print "发表成功 ： " + self.gettextfromjson(ret, 'created_at')

@@ -22,7 +22,7 @@ class friends:
 		ret = self._interface.callweibo()
 		msg_list = message_list(ret)
 		
-		i = 1
+		i = 0
 		while i < msg_list.get_msg_count():
 			msg = msg_list.get_message(i)
 			usr = msg.msg_user()
