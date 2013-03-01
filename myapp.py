@@ -40,6 +40,7 @@ class WeiboApi:
 	def testLog(self):
 		interface = WeiboInterface(self._username, self._passwd)
 		thepage =  interface.callweibo('friends_timeline')
+                thepage =  interface.callweibo('public_timeline')
 		print self._username + " 已经成功登录"
 	def process(self, line):
 		if line not in cmdlist:

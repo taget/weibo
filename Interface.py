@@ -12,13 +12,14 @@ import base64
 from urlparse import urlparse 
 
 def geturl(opt):
-	theurl = 'http://api.t.sina.com.cn/statuses/'
+	theurl = 'http://api.weibo.com/2/statuses/'
 	return theurl + opt + '.json?source=35587412'
-
 class WeiboInterface():
 	def __init__(self, username, passwd):
 		self._username = username
 		self._passwd = passwd
+	def addopt(self, opt, val):
+		print opt % val
 	def callweibo(self, opt, data = None):
 		theurl = geturl(opt)
 		req=urllib2.Request(theurl)

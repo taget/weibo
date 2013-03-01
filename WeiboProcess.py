@@ -9,10 +9,10 @@ import sys
 import re
 import base64
 import logging
-import WeiboUtil
 from urlparse import urlparse 
 from Interface import WeiboInterface
 from Json import JsonProcessor
+from friends import friends
 
 def Weibohelp():
 	print "	h : 帮助"
@@ -39,29 +39,8 @@ class WeiboCMD:
 		if line == 'h' or line == 'help':
 			Weibohelp()
 		if line == 'f':
-			'''
-			查看当前关注用户的最新20条
-			'''
-			print '查看当前关注用户的最新20条...'
-			try:
-				texts = self._jsonprocessor.Parse_json_2_list(self._interface.callweibo('friends_timeline'))
-			except:
-				print "拉取失败，请重试"
-				return
-			i = 1 
-			print '[序号]--[作者]--[内容]----------------------------------------------------'
-			for text in texts:
-				retweete = self.gettextfromlist(text, 'retweeted_status')
-				if retweete == False:
-					sys.stdout.write("【原创】")
-					print "[%d] : [%s] %s" %(i, self.gettextfromlist(text, 'user').get('name'),
-					self.gettextfromlist(text, 'text'))
-				else:
-					print "[%d] : [%s] %s" %(i, self.gettextfromlist(text, 'user').get('name'),
-					self.gettextfromlist(text, 'text'))
-					print "--->>>转发原文内容为<<<---"
-					print retweete['text'] 
-				i = i + 1
+			f = friends(self._interface)
+			f.run()
 		if line == 's':
 			print "s!"
 		if line == 'l':

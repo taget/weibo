@@ -9,7 +9,7 @@ import re
 
 class JsonProcessor:
 	def __init__(self):
-		print 'init'
+		print 'Json processor init'
 	def Parse_json_2_list(self, ret):
 		'''
 		parse json to list
