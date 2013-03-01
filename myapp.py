@@ -17,7 +17,7 @@ from Interface import WeiboInterface
 from WeiboProcess import WeiboCMD
 
 cmdlist = {
-'','w','q','quit','h','help','l','f'}
+'','w','q','quit','h','help','l','f','m','u'}
 
 class WeiboApi:
 	def __init__(self):
@@ -39,8 +39,8 @@ class WeiboApi:
 		self._process = WeiboCMD(self._username, self._passwd)
 	def testLog(self):
 		interface = WeiboInterface(self._username, self._passwd)
-		thepage =  interface.callweibo('friends_timeline')
-                thepage =  interface.callweibo('public_timeline')
+		interface.seturl('statuses/friends_timeline')
+		interface.callweibo()
 		print self._username + " 已经成功登录"
 	def process(self, line):
 		if line not in cmdlist:

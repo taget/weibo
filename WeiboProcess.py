@@ -19,6 +19,8 @@ def Weibohelp():
 	print "	f : 获取当前登录用户及其所关注用户的最新微博"
 	print "	l : 获得关注列表"
 	print "	w : 写一条新微博"
+	print "	m : 查看@我的微博"
+	print "	u : 查看用户信息"
 	print "	q : 退出微博客户端"
 
 class WeiboCMD:
@@ -39,12 +41,13 @@ class WeiboCMD:
 		if line == 'h' or line == 'help':
 			Weibohelp()
 		if line == 'f':
-			f = friends(self._interface)
+			f = friends(self._interface, 'statuses/friends_timeline')
 			f.run()
 		if line == 's':
 			print "s!"
-		if line == 'l':
-			print "l!"
+		if line == 'm':
+			f = friends(self._interface, 'statuses/mentions')
+			f.run()
 		if line == 'w':
 			try:
 				line = raw_input("请输入要发表的内容（不超过140字,ctrl + d 取消发表）")

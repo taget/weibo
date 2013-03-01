@@ -11,18 +11,22 @@ import re
 import base64
 from urlparse import urlparse 
 
-def geturl(opt):
-	theurl = 'http://api.weibo.com/2/statuses/'
-	return theurl + opt + '.json?source=35587412'
 class WeiboInterface():
 	def __init__(self, username, passwd):
 		self._username = username
 		self._passwd = passwd
+		self._theurl = 'http://api.weibo.com/2/'
+		self._commandline = ''
+		self._opt = ''
+	def seturl(self, opt):
+		self._commandline = opt + '.json?source=35587412'
+
 	def addopt(self, opt, val):
-		print opt % val
-	def callweibo(self, opt, data = None):
-		theurl = geturl(opt)
-		req=urllib2.Request(theurl)
+		self._opt = self._opt + '&&' + opt + '=' + val
+
+	def callweibo(self, data = None):
+		req = urllib2.Request(self._theurl + self._commandline + self._opt)
+		self._opt = ''
 		base64string = base64.encodestring(
 					'%s:%s' % (self._username, self._passwd))[:-1] #注意哦，这里最后会自动添加一个\n
 		authheader =  "Basic %s" % base64string
