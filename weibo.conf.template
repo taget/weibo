@@ -1,6 +1,6 @@
 [vars]
-username = 月亮jimmy
-passwd = jimmy1985
+username = user
+passwd = pass
 
 [conf]
 keyword = exec
