@@ -95,12 +95,15 @@ class Monitor:
 	def loop(self):
 		self._interface.seturl('statuses/mentions')
 		self._interface.addopt('count','2')
-		ret = self._interface.callweibo()
-		msg_list = message_list(ret)
-		msg = msg_list.get_message(0)
-		usr = msg.msg_user()
-		ret_msg = msg.msg_text()
-		
+		try:
+			ret = self._interface.callweibo()
+			msg_list = message_list(ret)
+			msg = msg_list.get_message(0)
+			usr = msg.msg_user()
+			ret_msg = msg.msg_text()
+		except:
+			self.error("unexcept error happened, continue to run")
+			return
 		if self._lastmsg != ret_msg:
 			self._lastmsg = ret_msg
 			self._run = True
