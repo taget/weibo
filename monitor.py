@@ -46,6 +46,7 @@ class Monitor:
 			self._username = config.get('vars', 'username')
 			self._passwd = config.get('vars', 'passwd')
 			self._keyword = config.get('conf', 'keyword')
+			self._auth = config.get('conf', 'auth')
 		except:
 			print "error happend when read conf"
 			sys.exit(1)
@@ -101,8 +102,11 @@ class Monitor:
 			msg = msg_list.get_message(0)
 			usr = msg.msg_user()
 			ret_msg = msg.msg_text()
+			auth_usr = usr.get_user_name()
 		except:
-			self.error("unexcept error happened, continue to run")
+			#self.error("unexcept error happened, continue to run")
+			return
+		if auth_usr.encode('utf-8') != self._auth:
 			return
 		if self._lastmsg != ret_msg:
 			self._lastmsg = ret_msg
