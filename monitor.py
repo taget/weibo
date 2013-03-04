@@ -18,6 +18,7 @@ import base64
 import json
 import logging
 import time
+import unicodedata
 from urlparse import urlparse 
 from Interface import WeiboInterface
 from WeiboProcess import WeiboCMD
@@ -45,12 +46,32 @@ class Monitor:
 			self._username = config.get('vars', 'username')
 			self._passwd = config.get('vars', 'passwd')
 			self._keyword = config.get('conf', 'keyword')
-			self._cmd = config.get('conf', 'cmd')
 		except:
 			print "error happend when read conf"
 			sys.exit(1)
 		self._interface = WeiboInterface(self._username, self._passwd)
 		self._logger = logging.getLogger('Monitor.log')
+		self._lastmsg = ''
+		self._run = False
+		
+	def run_command(self, cmd):
+		print "ready to run shell command: " + cmd
+		rc = -1
+		out = ''
+		err = ''
+		rc, out, err = exec_command(cmd)
+		if rc == 0:
+			ret_msg = 'done ' + cmd
+			return 1
+		else:
+			return 0
+			
+	def parse_keyword(self, msg):
+		return msg[7:11] # find exec 
+		
+	def parse_cmd(self, msg): # find shell command
+		return msg[12:]
+			
 	def loop(self):
 		self._interface.seturl('statuses/mentions')
 		self._interface.addopt('count','2')
@@ -59,27 +80,31 @@ class Monitor:
 		msg = msg_list.get_message(0)
 		usr = msg.msg_user()
 		ret_msg = msg.msg_text()
-		cmd = ret_msg.find('echo')
-	'''	
-		if msg.msg_text().find(self._keyword):
-			print "find!!"
-			rc = -1
-			out = ''
-			err = ''
-			rc, out, err = exec_command(self._cmd)
-			if rc == 0:
-				ret_msg = 'done ' + self._cmd
-				data = writetext(ret_msg)
+		
+		
+		if self._lastmsg != ret_msg:
+			self._lastmsg = ret_msg
+			self._run = True
+		else:
+			print "zz..."
+			self._run = False
+		
+		key_word = self.parse_keyword(ret_msg)
+		
+		if self._run == True and key_word == self._keyword:
+			cmd = self.parse_cmd(ret_msg)
+			if self.run_command(cmd):
+				ret = 'done ' + cmd
+				data = writetext(ret)
 				try:
 					self._interface.seturl('statuses/update')
-					ret = self._interface.callweibo(data)
+					self._interface.callweibo(data)
+					print 'run successful , write back to weibo'
 				except:
 					print "wrong"
-'''
 
 def main():
 	mon = Monitor()
-	#weibo.testLog()
 	while True:
 		mon.loop()
 		
