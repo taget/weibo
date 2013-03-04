@@ -89,7 +89,7 @@ class Monitor:
 
 	def run(self):
 		while True:
-			mon.loop()
+			self.loop()
 			time.sleep(self._sleep_time)
 
 	def loop(self):
