@@ -22,7 +22,7 @@
 #  
 #  
 
-from bottle import route, get, post, request, run, static_file, error,template
+from bottle import route, get, post, request, run, static_file, error,template, debug, hook,response
 import os
 import urllib2
 import urllib
@@ -119,6 +119,11 @@ def do_login():
 @route('/static/<filepath:path>')
 def server_static(filepath):
     return static_file(filepath, root='/home/qiaoliyong/')
+    
+
+@hook('after_request')
+def enable_cors():
+	return "nono..."
 
 @get('/rhevhbuild')
 def rhevhbuild():
@@ -127,10 +132,10 @@ def rhevhbuild():
               <p>RAV_LINK_ADDRESS:<input name="RAV_LINK_ADDRESS" type="text" /></p>
               <p>RAV_PACKAGE_NAME:<input name="RAV_PACKAGE_NAME" type="text" /></p>
               <p>EMULEX_LINK_ADDRESS:<input name="EMULEX_LINK_ADDRESS" type="text" /></p>
-              <p>EMULEX_PACKAGE_NAME:<input name="MULEX_PACKAGE_NAME" type="text" /></p>
+              <p>EMULEX_PACKAGE_NAME:<input name="EMULEX_PACKAGE_NAME" type="text" /></p>
               <p>PA_SELINUX_POLICY_ADDRESS:<input name="PA_SELINUX_POLICY_ADDRESS" type="text" /></p>
               <p>PA_SELINUX_POLICY_NAME:<input name="PA_SELINUX_POLICY_NAME" type="text" /></p>
-                <input type="submit" />
+                <input name="sub" type="submit" enable='false'/>
               </form>'''
 @post('/rhevhbuild')
 def do_build():
@@ -140,7 +145,7 @@ def do_build():
 	emu_name = request.forms.get('EMULEX_PACKAGE_NAME')
 	pa_addr = request.forms.get('PA_SELINUX_POLICY_ADDRESS')
 	pa_name = request.forms.get('PA_SELINUX_POLICY_NAME')
-	
+	//request.forms.get('sub').set
 	
 #$cmd = "RAV_LINK_ADDRESS=$RAV_LINK_ADDRESS RAV_PACKAGE_NAME=$RAV_PACKAGE_NAME EMULEX_LINK_ADDRESS=$EMULEX_LINK_ADDRESS EMULEX_PACKAGE_NAME=$EMULEX_PACKAGE_NAME SELINUX_LINK_ADDRESS=$SELINUX_POLICY_ADDRESS SELINUX_PACKAGE_NAME=$SELINUX_POLICY_NAME /home/git/bingbu/rhevh/pa-download-uncompress.sh";
 #$cmd = "/home/git/bingbu/rhevh/a.sh $RAV_LINK_ADDRESS $RAV_PACKAGE_NAME $EMULEX_LINK_ADDRESS $EMULEX_PACKAGE_NAME $SELINUX_POLICY_ADDRESS SELINUX_POLICY_NAME ";
@@ -153,12 +158,15 @@ def do_build():
 #$out = shell_exec($cmd);
 	
 	return template('<form><input type="submit" value="Refresh"/></form><b>{{addr}} : {{pkg_name}}</b>!', addr= cmdline, pkg_name=rav_name)
-        
+
+
+    
 @error(404)
 def error404(error):
     return 'Nothing here, sorry'    
     
 def main():
+	debug(True)
 	run(host='localhost', port=8080, debug=True)
 	return 0
 
