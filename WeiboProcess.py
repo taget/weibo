@@ -14,6 +14,9 @@ from Interface import WeiboInterface
 from Json import JsonProcessor
 from friends import friends
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 def Weibohelp():
 	print "	h : 帮助"
 	print "	f : 获取当前登录用户及其所关注用户的最新微博"
