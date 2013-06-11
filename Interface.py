@@ -15,7 +15,8 @@ class WeiboInterface():
 	def __init__(self, username, passwd):
 		self._username = username
 		self._passwd = passwd
-		self._theurl = 'http://api.weibo.com/2/'
+#		self._theurl = 'http://api.weibo.com/2/'
+		self._theurl = 'https://api.weibo.com/2/'
 		self._commandline = ''
 		self._opt = ''
 	def seturl(self, opt):
@@ -31,6 +32,9 @@ class WeiboInterface():
 					'%s:%s' % (self._username, self._passwd))[:-1] #注意哦，这里最后会自动添加一个\n
 		authheader =  "Basic %s" % base64string
 		req.add_header("Authorization", authheader)
+		print authheader
+		print self._theurl + self._commandline + self._opt
+		print data
 		try:
 			handle = urllib2.urlopen(req, data)
 		except IOError, e:

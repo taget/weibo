@@ -8,7 +8,6 @@ from weibo import APIClient
 
 import ConfigParser
 import sys,time
-import webbrowser
 
 app_key = '35587412'
 app_secret = '1b054a023d36fbacd3e26a5b723baf4d'
@@ -19,13 +18,13 @@ def main():
 	
 	url = client.get_authorize_url()
 	print url
-	webbrowser.open_new(url)
-	code = raw_input()
+	code = raw_input("Input code:")
+	print code
 	r = client.request_access_token(code)
-	access_token = r.access_token  # access token，e.g., abc123xyz456
-	expires_in = r.expires_in      # token expires in
-	client.set_access_token(access_token, expires_in)
-	print(client.statuses__public_timeline())
+	client.set_access_token(r.access_token, r.expires_in)
+	
+	print(client.upload.statuses__upload(status='uploaded at  '\
+		+ str(time.time()), pic=open('1.jpg', 'rb')))
 
 if __name__ == '__main__':
 	main()

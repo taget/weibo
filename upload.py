@@ -18,25 +18,15 @@ r_url = 'https://api.weibo.com/oauth2/default.html'
 uname = '月亮jimmy'
 passw = 'jimmy1985'
 
-def main():
-	client = APIClient(app_key=app_key, app_secret=app_secret)
 
+def GetBlogClient(uname, passw):
+
+	client = APIClient(app_key=app_key, app_secret=app_secret)
 	reqToken = client.get_request_token()	
 	auth_url =  client.get_authorize_url(reqToken)
-	post_data = urllib.urlencode({  
-            "action": "submit",
-            "forcelogin": "",  
-            "from": "",  
-            "oauth_callback" : "http://api.weibo.com/oauth2/default.html",
-            "oauth_token" : reqToken.oauth_token,
-            "passwd" : passw,
-            "regCallback": "",  
-            "ssoDoor": "",  
-            "userId" : uname,  
-            "vdCheckflag" : 1,  
-            "vsnval":""  
-        })  
+	return APIClient(app_key, app_secret, client.get_access_token())
   
 
 if __name__ == '__main__':
-	main()
+	api = GetBlogClient(uname, passw)
+	r = api.get.statuses__user_timeline()
