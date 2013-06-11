@@ -17,7 +17,7 @@ from Interface import WeiboInterface
 from WeiboProcess import WeiboCMD
 
 cmdlist = {
-'','w','q','quit','h','help','l','f','m','u'}
+'','w','q','quit','h','help','l','f','m','u','wpic'}
 
 class WeiboApi:
 	def __init__(self):
